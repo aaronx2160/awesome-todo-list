@@ -1,0 +1,12 @@
+.card {
+  margin: 0 auto;
+}
+.card input {
+  margin-bottom: 10px;
+}
+.card .list .list-item {
+  display: flex;
+}
+.card .list .list-item span {
+  margin-left: 5px;
+}
