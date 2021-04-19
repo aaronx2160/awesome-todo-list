@@ -1,6 +1,6 @@
 .app {
-  margin-left: 50%;
-  transform: translate(-50%, 20%);
+  width: 80%;
+  margin: 0 auto;
 }
 .app h1 {
   color: red;
@@ -9,4 +9,5 @@
 .app .list-warpper {
   display: flex;
   flex-flow: row;
+  justify-content: space-around;
 }

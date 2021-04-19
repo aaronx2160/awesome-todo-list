@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Card, List, Checkbox } from 'antd'
-import {getData_action} from "../../store/actions/get_data_action";
-
+import { getData_action } from '../../store/actions/get_data_action'
+import './DoneList.css'
 
 class DoneList extends Component {
   constructor() {
@@ -14,10 +14,10 @@ class DoneList extends Component {
     this.props.getData()
   }
   render() {
-    const {dataList} =this.props
+    const { dataList } = this.props
     return (
       <div>
-        <Card size="small" style={{ width: 500 }} className="card">
+        <Card size="small" style={{ width: 500 }} className="done-list-card">
           <List
             header={<h3>Done List</h3>}
             className="list"
@@ -54,8 +54,8 @@ class DoneList extends Component {
 const mapDispatchToProps = (dispatch) => {
   return { getData: () => dispatch(getData_action()) }
 }
-const mapStateToProps=(state)=>{
-  return {dataList:state.dataList}
+const mapStateToProps = (state) => {
+  return { dataList: state.dataList }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(DoneList)
+export default connect(mapStateToProps, mapDispatchToProps)(DoneList)

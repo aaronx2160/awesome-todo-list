@@ -1,10 +1,10 @@
-import Todolist from './components/TodoList/Todolist'
-import DoneList from './components/DoneList/DoneList'
-import { Provider } from 'react-redux'
-import store from './store'
-import './App.css'
-import 'antd/dist/antd.css'
-import { Divider } from 'antd'
+import Todolist from "./components/TodoList/Todolist";
+import DoneList from "./components/DoneList/DoneList";
+import { Provider } from "react-redux";
+import store from "./store";
+import "./App.css";
+import "antd/dist/antd.css";
+import { Divider } from "antd";
 
 function App() {
   return (
@@ -18,7 +18,7 @@ function App() {
         </div>
       </div>
     </Provider>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -1,0 +1,5 @@
+.done-list-card .list .list-item .item-text span {
+  margin-left: 10px;
+  text-decoration: line-through;
+  color: #ccc;
+}
