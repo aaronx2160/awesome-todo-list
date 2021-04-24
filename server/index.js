@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const conn = require('./db2')
+const formatDate = require('./time')
 
 app.listen(10000, () => {
   console.log('server started listening at 10000')
@@ -27,7 +28,7 @@ app.all('*', function (req, res, next) {
 
 app.get('/todolist', (req, res) => {
   const sql = 'select * from todolist order by ?? desc'
-  conn(sql, ['id'], (err, ress) => {
+  conn(sql, ['timeCreated'], (err, ress) => {
     if (err) {
       res.send({ data: null, meta: { status: 404, msg: '获取todolist失败' } })
     } else {
@@ -55,19 +56,26 @@ app.post('/todolist', (req, res) => {
 })
 
 app.put('/status', (req, res) => {
-  const { id } = req.body
-  const sql = 'UPDATE todolist SET ??=? WHERE ??=?'
+  let { id, status } = req.body
+  let newStatus = parseInt(status) === 0 ? 1 : 0
+  let date = formatDate(Date.now())
+  const sql = 'UPDATE todolist SET ??=?, ??=? WHERE ??=?'
 
-  conn(sql, ['status', 1, 'id', id], (err, ress) => {
-    if (err) {
-      res.send({ data: null, meta: { status: 404, msg: 'todolist删除失败' } })
-    } else {
-      res.send({
-        data: null,
-        meta: { status: 200, msg: '已成功删除该任务' },
-      })
+  conn(
+    sql,
+    ['status', newStatus, 'timeCreated', date, 'id', id],
+    (err, ress) => {
+      if (err) {
+        console.log(err)
+        res.send({ data: null, meta: { status: 404, msg: 'todolist更新失败' } })
+      } else {
+        res.send({
+          data: null,
+          meta: { status: 200, msg: '已成功更新该任务' },
+        })
+      }
     }
-  })
+  )
 })
 
 app.delete('/todolist/:id', (req, res) => {

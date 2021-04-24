@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import axios from 'axios'
 import './Todolist.css'
 import {getData_action} from "../../store/actions/get_data_action";
+import {checkChange, addNewTask,deleteTask} from "../../utils/api";
 import { Button, Input, Card, List, Checkbox, Popconfirm, message } from 'antd'
 
 
 class Todolist extends Component {
   constructor() {
     super()
-    this.baseUrl = 'http://localhost:10000/'
     this.state = {
       inputVal: '',
       loading: true,
@@ -51,7 +50,7 @@ class Todolist extends Component {
           onMouseLeave={this.listItemOnMouseLeave(item.id)}
         >
           <div className="item-text">
-            <Checkbox onChange={this.handleChkChange(item.id)} />
+            <Checkbox onChange={this.handleChkChange(item.id,item.status)} />
             <span>{item.content}</span>
           </div>
 
@@ -92,28 +91,28 @@ class Todolist extends Component {
     this.setState({ inputVal: e.target.value })
   }
   handleInputEnterKey = () => {
-    axios
-      .post(this.baseUrl + 'todolist', { content: this.state.inputVal })
-      .then(() => {
-        this.props.getData()
-        this.setState({inputVal:''})
-      })
+    const inputVal = this.state.inputVal.trim()
+    if(!inputVal) return
+    addNewTask(inputVal).then(()=>{
+      this.props.getData()
+      this.setState({inputVal:''})
+    })
   }
-  handleChkChange = (id) => {
+  handleChkChange = (id,status) => {
     return () => {
-      axios.put(this.baseUrl + 'status', { id }).then(() => {
+      checkChange(id,status).then(()=>{
         this.props.getData()
       })
     }
   }
   handleDeleteItem = (id) => {
     return () => {
-      axios.delete(this.baseUrl + 'todolist/' + id).then((res) => {
+      deleteTask(id).then((res)=>{
         const { meta } = res.data
         if (meta.status === 200) {
           message.success(meta.msg)
+          this.props.getData()
         }
-        this.props.getData()
       })
     }
   }

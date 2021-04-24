@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Card, List, Checkbox } from 'antd'
+import { Card, List, Checkbox,Popconfirm, message } from 'antd'
 import { getData_action } from '../../store/actions/get_data_action'
+import {checkChange} from "../../utils/api";
 import './DoneList.css'
 
 class DoneList extends Component {
   constructor() {
     super()
-    this.baseUrl = 'http://localhost:10000/'
     this.state = { loading: true }
   }
   componentDidMount() {
@@ -37,17 +37,26 @@ class DoneList extends Component {
       item.status === '1' ? (
         <List.Item className="list-item" key={item.id}>
           <div className="item-text">
-            <Checkbox onChange={this.handleChkChange(item.id)} />
+            <Popconfirm
+                title="Are you sure to mark this task as unfinished?"
+                onConfirm={this.undoTask(item.id,item.status)}
+                onCancel={()=>{return}}
+                okText="Yes"
+                cancelText="No">
+              <Checkbox checked={item.status} />
+            </Popconfirm>
             <span>{item.content}</span>
           </div>
         </List.Item>
       ) : null
     return Item
   }
-
-  handleChkChange = (id) => {
-    return () => {
-      console.log(id)
+  undoTask=(id,status)=>{
+    return ()=>{
+      console.log(id,status)
+      checkChange(id,status).then(()=>{
+        this.props.getData()
+      })
     }
   }
 }
